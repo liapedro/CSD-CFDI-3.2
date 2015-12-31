@@ -110,6 +110,27 @@ class Csd
         return $valid[0] === 'OU';
     }
 
+    public function getNoCertificado()
+    {
+        exec("openssl x509 -inform DER -in {$this->cer} -noout -serial", $out, $errors);
+
+        if ($errors) {
+            $this->throwError("Ha ocurrido un error al intentar obtener el numero de certificado.");
+        }
+
+        $vars = explode("=", $out[0]);
+        $certificado = end($vars);
+        $no_certificado = '';
+
+        for ($i = 0; $i < strlen($certificado); $i++) {
+            if ($i % 2 != 0) {
+                $no_certificado .= substr($certificado, $i, 1);
+            }
+        }
+
+        return $no_certificado;
+    }
+
     protected function throwError($error)
     {
         throw new CsdException(
