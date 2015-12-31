@@ -3,6 +3,7 @@
 namespace JorgeAndrade;
 
 use DateTime;
+use DateTimeZone;
 use JorgeAndrade\Exceptions\CsdException;
 
 class Csd
@@ -86,9 +87,9 @@ class Csd
         $fecha_inicial = explode("=", $out[0]);
         $fecha_final = explode("=", $out[1]);
 
-        $now = new DateTime("now");
-        $fecha_inicial = new DateTime(end($fecha_inicial));
-        $fecha_final = new DateTime(end($fecha_final));
+        $now = new DateTime("now", new DateTimeZone('America/Mexico_City'));
+        $fecha_inicial = new DateTime(end($fecha_inicial), new DateTimeZone('America/Mexico_City'));
+        $fecha_final = new DateTime(end($fecha_final), new DateTimeZone('America/Mexico_City'));
 
         if ($now < $fecha_inicial || $now > $fecha_final) {
             $this->throwError("El csd no es valido.");
